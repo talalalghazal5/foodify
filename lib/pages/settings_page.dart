@@ -44,8 +44,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     value: Provider.of<ThemeProvider>(context, listen: false)
                         .isDarkMode,
                     onChanged: (value) {
-                      Provider.of<ThemeProvider>(context, listen: false)
+                      setState(() {
+                        Provider.of<ThemeProvider>(context, listen: false)
                           .toggleThemeMode();
+                      });
                     }),
               ],
             ),

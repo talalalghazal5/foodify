@@ -189,7 +189,7 @@ class Restaurant extends ChangeNotifier {
     for (CartItem cartItem in _cart) {
       cost += cartItem.totalPrice;
     }
-    return cost;
+    return double.parse(cost.toStringAsFixed(2)) ;
   }
 
 // get total number of items in the cart

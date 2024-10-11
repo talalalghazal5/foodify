@@ -14,7 +14,7 @@ class MySliverAppBar extends StatelessWidget {
       required this.scaffoldKey});
 
 //=======================================----------M A I N  C O N T E N T ------------=======================================================
-  
+
   @override
   Widget build(context) {
     return SliverAppBar(
@@ -39,8 +39,15 @@ class MySliverAppBar extends StatelessWidget {
       actions: [
         IconButton(
             onPressed: () {
-              scaffoldKey.currentState!
-                  .showBottomSheet((context) => CartPage(), showDragHandle: true, backgroundColor: Theme.of(context).colorScheme.tertiary);
+              scaffoldKey.currentState!.showBottomSheet(
+                  
+                  (context) => const CartPage(),
+                  
+                  showDragHandle: true,
+                  enableDrag: true,
+                  sheetAnimationStyle: AnimationStyle(curve: Curves.ease, duration: Duration(milliseconds: 300)),
+                  backgroundColor: Theme.of(context).colorScheme.tertiary,
+                  );
             },
             icon: const FaIcon(FontAwesomeIcons.cartShopping))
       ],
@@ -57,8 +64,4 @@ class MySliverAppBar extends StatelessWidget {
       ),
     );
   }
-
-  
-  
 }
-

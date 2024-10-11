@@ -11,10 +11,10 @@ class CartItem {
     // TODO: Ask Copilot about this fold() function:
     if (selectedAddOns != null) {
       double addonsPrice = selectedAddOns!.fold(0, (sum, addon) => sum + addon.price,);
-      return (food.price + addonsPrice) * quantity;
+      return double.parse(((food.price + addonsPrice) * quantity).toStringAsFixed(2));
     }
     else {
-      return food.price * quantity;
+      return double.parse((food.price * quantity).toStringAsFixed(2));
     }
   }
 
