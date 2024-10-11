@@ -132,6 +132,7 @@ class _CartPageState extends State<CartPage>
                       return MyCartTile(cartItem: userCart[index]);
                     },
                   )),
+                  //TODO: create a checkout button.
                   ]
                 ],
               ),
