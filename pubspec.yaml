@@ -1,0 +1,43 @@
+name: foodify
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  collection: ^1.18.0
+  cupertino_icons: ^1.0.8
+  flutter:
+    sdk: flutter
+  font_awesome_flutter: ^10.7.0
+  food_icons: ^0.0.6
+  hugeicons: 0.0.7
+  provider: ^6.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets: 
+    - lib/assets/images/
+  fonts:
+    - family: sf_pro_display_regular
+      fonts:
+        - asset: lib/assets/fonts/SF-Pro-Display-Regular.otf
+
+    - family: sf_pro_rounded_regular
+      fonts:
+        - asset: lib/assets/fonts/SF-Pro-Rounded-Regular.otf
+
+    - family: sf_pro_display_rounded_light
+      fonts:
+        - asset: lib/assets/fonts/SF-Pro-Rounded-Light.otf
+
+    - family: sf_pro_display_light
+      fonts:
+        - asset: lib/assets/fonts/SF-Pro-Display-Light.otf
