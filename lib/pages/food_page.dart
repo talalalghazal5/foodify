@@ -1,5 +1,8 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodify/components/my_button.dart';
 import 'package:foodify/models/food.dart';
 import 'package:foodify/models/restaurant.dart';
@@ -8,7 +11,10 @@ import 'package:provider/provider.dart';
 class FoodPage extends StatefulWidget {
   final Food food;
   final Map<AddOn, bool> selectedAddOns = {};
-  FoodPage({super.key, required this.food,}) {
+  FoodPage({
+    super.key,
+    required this.food,
+  }) {
     if (food.availableAddOns != null) {
       for (AddOn addon in food.availableAddOns!) {
         selectedAddOns[addon] = false;
@@ -22,7 +28,6 @@ class FoodPage extends StatefulWidget {
 
 class _FoodPageState extends State<FoodPage> {
   void addToUICart({required Food food, Map<AddOn, bool>? selectedAddOns}) {
-
     // closing the food page:
     Navigator.pop(context);
 
@@ -34,7 +39,9 @@ class _FoodPageState extends State<FoodPage> {
           currentlySelectedAddons.add(addOn);
         }
       }
-      context.read<Restaurant>().addToCart(food: food, selectedAddOns: currentlySelectedAddons);
+      context
+          .read<Restaurant>()
+          .addToCart(food: food, selectedAddOns: currentlySelectedAddons);
     } else {
       context.read<Restaurant>().addToCart(food: food);
     }
@@ -43,14 +50,30 @@ class _FoodPageState extends State<FoodPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pop(context),
-        backgroundColor: Theme.of(context).colorScheme.secondary,
-        elevation: 0,
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
-        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        child: const Icon(CupertinoIcons.chevron_back),
+      floatingActionButton: InkWell(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                  borderRadius: BorderRadius.circular(100),
+                  gradient: LinearGradient(colors: [
+                    Colors.white.withOpacity(0.6),
+                    Colors.white.withOpacity(0.2)
+                  ], begin: Alignment.topLeft)),
+              child: Center(
+                  child: FaIcon(
+                FontAwesomeIcons.chevronLeft,
+                color: Colors.white.withOpacity(0.5),
+              )),
+            ),
+          ),
+        ),
+        onTap: () => Navigator.pop(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       body: SingleChildScrollView(
@@ -83,7 +106,7 @@ class _FoodPageState extends State<FoodPage> {
                   const SizedBox(
                     height: 15,
                   ),
-              
+
                   //description
                   Text(
                     widget.food.description,
@@ -100,7 +123,7 @@ class _FoodPageState extends State<FoodPage> {
                       endIndent: 20,
                       color: Theme.of(context).colorScheme.primary),
                   //addons
-              
+
                   if (widget.food.availableAddOns == null ||
                       widget.food.availableAddOns!.isEmpty)
                     Align(
@@ -112,9 +135,8 @@ class _FoodPageState extends State<FoodPage> {
                           style: TextStyle(
                               fontFamily: 'sf_pro_display_regular',
                               fontSize: 15,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .inversePrimary),
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
                         ),
                       ),
                     )
@@ -138,6 +160,15 @@ class _FoodPageState extends State<FoodPage> {
               onTap: () {
                 addToUICart(
                     food: widget.food, selectedAddOns: widget.selectedAddOns);
+                const snackBar = SnackBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  behavior: SnackBarBehavior.floating,
+                    content: AwesomeSnackbarContent(
+                        title: 'Added to cart',
+                        message: 'Food added to cart successfully',
+                        contentType: ContentType.success));
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
             )),
       ),

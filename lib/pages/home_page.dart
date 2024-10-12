@@ -23,7 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
+  late ScrollController _scrollController;
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
@@ -31,11 +31,13 @@ class _HomePageState extends State<HomePage>
     super.initState();
     _tabController =
         TabController(length: FoodCategory.values.length, vsync: this);
+    _scrollController = ScrollController();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -50,6 +52,7 @@ class _HomePageState extends State<HomePage>
       List<Food> foodOfThisCategory = _filterFoodByCategory(category, fullMenu);
 
       return ListView.builder(
+        controller: _scrollController,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: foodOfThisCategory.length,
         itemBuilder: (context, index) {
@@ -75,6 +78,7 @@ class _HomePageState extends State<HomePage>
       key: scaffoldKey,
       drawer: const MyDrawer(),
       body: NestedScrollView(
+          controller: _scrollController,
           floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 MySliverAppBar(

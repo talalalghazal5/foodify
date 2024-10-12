@@ -16,8 +16,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
-  
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,15 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 20,
             ),
+            Text(
+              'Foodify',
+              style: TextStyle(
+                  fontSize: 30,
+                  fontFamily: 'sf_pro_display_regular',
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.inversePrimary),
+            ),
+            const SizedBox(height: 10,),
             //welcoming message
             Text(
               'Let\'s make you an account:',
@@ -84,7 +93,8 @@ class _RegisterPageState extends State<RegisterPage> {
               text: 'Sign up',
               margin: const EdgeInsets.symmetric(horizontal: 25),
               onTap: () {
-                Navigator.push(context, CupertinoPageRoute(builder: (context) => const HomePage()));
+                Navigator.push(context,
+                    CupertinoPageRoute(builder: (context) => const HomePage()));
               },
             ),
             const SizedBox(

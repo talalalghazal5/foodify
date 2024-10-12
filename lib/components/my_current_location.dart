@@ -9,6 +9,17 @@ class MyCurrentLocation extends StatefulWidget {
 }
 
 class _MyCurrentLocationState extends State<MyCurrentLocation> {
+
+
+  late TextEditingController _myTextController;
+  late String locationValue;
+  @override
+  void initState() {
+    super.initState();
+    _myTextController = TextEditingController();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,7 +39,7 @@ class _MyCurrentLocationState extends State<MyCurrentLocation> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Pasadena,California CA 9014',
+                  _myTextController.text ==''? 'Pasadena,California CA 9014' : locationValue,
                   style: TextStyle(
                       fontFamily: 'sf_pro_display_regular',
                       color: Theme.of(context).colorScheme.inversePrimary),
@@ -59,6 +70,7 @@ class _MyCurrentLocationState extends State<MyCurrentLocation> {
               style: TextStyle(fontFamily: 'sf_pro_display_regular'),
             ),
             content: TextField(
+              controller: _myTextController,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                 borderSide:
@@ -71,7 +83,11 @@ class _MyCurrentLocationState extends State<MyCurrentLocation> {
                   onPressed: () => Navigator.pop(context),
                   child: const Text('Cancel')),
               CupertinoButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    setState(() {
+                      locationValue = _myTextController.text;
+                    });
+                    Navigator.pop(context);},
                   child: const Text('Save')),
             ],
           );

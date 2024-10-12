@@ -37,15 +37,19 @@ class _LoginPageState extends State<LoginPage> {
             ),
             //welcoming message
             Text(
-              'Foodify delivery app',
+              'Foodify',
               style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 30,
                   fontFamily: 'sf_pro_display_regular',
+                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.inversePrimary),
             ),
+            const SizedBox(height: 15,),
+            Text('Welcome back! sign in to continue', style: TextStyle(fontFamily: 'sf_pro_display_regular',
+                  color: Theme.of(context).colorScheme.inversePrimary),),
 
             const SizedBox(
-              height: 60,
+              height: 50,
             ),
             //email text field
             MyTextField(
