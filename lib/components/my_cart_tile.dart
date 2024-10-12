@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodify/components/my_quantity_selector.dart';
 import 'package:foodify/models/cart_item.dart';
 import 'package:foodify/models/restaurant.dart';
+import 'package:foodify/pages/food_page.dart';
 import 'package:provider/provider.dart';
 
 class MyCartTile extends StatelessWidget {
@@ -15,7 +16,7 @@ class MyCartTile extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
         child: Container(
-          padding: EdgeInsets.only(left: 12, top: 8, right: 8, bottom: 8),
+          padding: const EdgeInsets.only(left: 12, top: 8, right: 8, bottom: 8),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondary,
             borderRadius: BorderRadius.circular(12),
@@ -29,14 +30,27 @@ class MyCartTile extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '${cartItem.food.name}',
-                        style: TextStyle(
-                            fontFamily: 'sf_pro_display_regular',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).colorScheme.inversePrimary),
+                      CupertinoContextMenu(
+                        actions: [
+                          CupertinoContextMenuAction(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            FoodPage(food: cartItem.food)));
+                              },
+                              child:const Text('Edit order'))
+                        ],
+                        child: Text(
+                          cartItem.food.name,
+                          style: TextStyle(
+                              fontFamily: 'sf_pro_display_regular',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary),
+                        ),
                       ),
                       Text(
                         'Price: \$${cartItem.food.price}',
@@ -100,7 +114,7 @@ class MyCartTile extends StatelessWidget {
                                 fontFamily: 'sf_pro_display_regular',
                                 color: Theme.of(context).colorScheme.primary)),
                       Container(
-                        margin: EdgeInsets.symmetric(vertical: 5),
+                        margin: const EdgeInsets.symmetric(vertical: 5),
                         width: 200,
                         height: 1,
                         color: Theme.of(context).colorScheme.primary,

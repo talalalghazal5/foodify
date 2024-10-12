@@ -45,7 +45,7 @@ class MySliverAppBar extends StatelessWidget {
                   
                   showDragHandle: true,
                   enableDrag: true,
-                  sheetAnimationStyle: AnimationStyle(curve: Curves.ease, duration: Duration(milliseconds: 300)),
+                  sheetAnimationStyle: AnimationStyle(curve: Curves.ease, duration: const Duration(milliseconds: 300)),
                   backgroundColor: Theme.of(context).colorScheme.tertiary,
                   );
             },

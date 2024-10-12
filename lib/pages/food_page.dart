@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class FoodPage extends StatefulWidget {
   final Food food;
   final Map<AddOn, bool> selectedAddOns = {};
-  FoodPage({super.key, required this.food}) {
+  FoodPage({super.key, required this.food,}) {
     if (food.availableAddOns != null) {
       for (AddOn addon in food.availableAddOns!) {
         selectedAddOns[addon] = false;

@@ -144,7 +144,7 @@ class Restaurant extends ChangeNotifier {
           bool isSameItem = item.food == food;
 
           bool isSameAddOns =
-              ListEquality().equals(item.selectedAddOns, selectedAddOns);
+              const ListEquality().equals(item.selectedAddOns, selectedAddOns);
 
           return isSameAddOns && isSameItem;
         },

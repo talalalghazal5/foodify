@@ -9,7 +9,7 @@ class MyQuantitySelector extends StatelessWidget {
   final Food food;
 
   const MyQuantitySelector(
-      {required this.quantity,
+      {super.key, required this.quantity,
       required this.onDecrement,
       required this.onIncrement,
       required this.food});

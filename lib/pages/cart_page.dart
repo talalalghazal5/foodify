@@ -34,7 +34,7 @@ class _CartPageState extends State<CartPage>
     return Consumer<Restaurant>(builder: (context, restaurant, child) {
       final userCart = restaurant.cart;
       return BottomSheet(
-          dragHandleSize: Size.fromWidth(140),
+          dragHandleSize: const Size.fromWidth(140),
           onClosing: () {},
           enableDrag: true,
           animationController: _controller,
@@ -117,7 +117,7 @@ class _CartPageState extends State<CartPage>
                   if(restaurant.cart.isEmpty) 
                   const Expanded(
                     child: Center(
-                      child: Text('You haven\'t ordered anything yet', style: TextStyle(fontFamily: 'sf_pro_display_regular'),),
+                      child: Text('Your cart is empty', style: TextStyle(fontFamily: 'sf_pro_display_regular'),),
                     ),
                   )
                   else ...[
@@ -132,7 +132,19 @@ class _CartPageState extends State<CartPage>
                       return MyCartTile(cartItem: userCart[index]);
                     },
                   )),
-                  //TODO: create a checkout button.
+                  
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(top: 15),
+                            width: 500,
+                            height: 80,
+                            decoration: BoxDecoration(color: Theme.of(context).colorScheme.tertiary.withOpacity(0.2)),
+                            child: CupertinoButton(color: Colors.green[700], child: Text('Checkout', style: TextStyle(color: Colors.white, fontFamily: 'sf_pro_display_regular'),), onPressed: (){})),
+                        ),
+                      ],
+                    )
                   ]
                 ],
               ),
