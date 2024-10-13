@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodify/components/my_cart_tile.dart';
 import 'package:foodify/models/restaurant.dart';
+
 import 'package:foodify/pages/checkout_page.dart';
 import 'package:provider/provider.dart';
 

@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:foodify/models/cart_item.dart';
 import 'package:foodify/models/food.dart';
+import 'package:intl/intl.dart';
 
 class Restaurant extends ChangeNotifier {
   final List<Food> _menu = [
@@ -134,8 +135,8 @@ class Restaurant extends ChangeNotifier {
 
   final List<CartItem> _cart = [];
 
-  List<CartItem> get  cart => _cart;
-  
+  List<CartItem> get cart => _cart;
+
 // add to cart
   void addToCart({required Food food, List<AddOn>? selectedAddOns}) {
     if (food.availableAddOns != null) {
@@ -189,7 +190,7 @@ class Restaurant extends ChangeNotifier {
     for (CartItem cartItem in _cart) {
       cost += cartItem.totalPrice;
     }
-    return double.parse(cost.toStringAsFixed(2)) ;
+    return double.parse(cost.toStringAsFixed(2));
   }
 
 // get total number of items in the cart
@@ -211,8 +212,47 @@ class Restaurant extends ChangeNotifier {
   H E L P E R S:
 */
 // generate receipt
+  String displayReceipt() {
+    final receipt = StringBuffer();
+    receipt.writeln('Receipt here:');
+    receipt.writeln();
+
+    String formattedDate =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+    receipt.writeln(formattedDate);
+    receipt.writeln('-------------------------');
+    receipt.writeln();
+
+    for (CartItem cartItem in _cart) {
+      receipt.writeln(
+          '${cartItem.quantity} x ${cartItem.food.name} - ${_priceFormatter(cartItem.food.price)}');
+      if (cartItem.selectedAddOns != null) {
+        if (cartItem.selectedAddOns!.isNotEmpty) {
+          receipt.writeln(' Add-ons:');
+          for (AddOn addon in cartItem.selectedAddOns!) {
+            receipt.writeln(' ${addon.name} (${_priceFormatter(addon.price)})');
+          }
+        }
+      }
+      receipt.writeln();
+    }
+    receipt.writeln('--------------------------');
+    receipt.writeln('Total items number: $totalCartItems');
+    receipt.writeln('Total cart cost: ${_priceFormatter(totalCartCost)}');
+    receipt.writeln();
+    receipt.writeln('Estimated delivery time: 14 minutes');
+    return receipt.toString();
+  }
 
 // format double values into money
+  String _priceFormatter(double price) {
+    return '\$${price.toStringAsFixed(2)}';
+  }
 
 // format list of addons into string summary
+  String _formatAddons(List<AddOn> addons) {
+    return addons.map((addon) {
+      return '${addon.name} (\$${_priceFormatter(addon.price)})';
+    }).join(', ');
+  }
 }

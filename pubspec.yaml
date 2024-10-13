@@ -16,6 +16,7 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   food_icons: ^0.0.6
   hugeicons: 0.0.7
+  intl: ^0.19.0
   provider: ^6.1.2
 
 dev_dependencies:
@@ -47,3 +48,14 @@ flutter:
     - family: sf_arabic
       fonts:
         - asset: lib/assets/fonts/SF-Arabic.ttf
+    - family: sf_mono_regular
+      fonts:
+        - asset: lib/assets/fonts/SF-Mono-Regular.otf
+
+    - family: sf_mono_medium
+      fonts:
+        - asset: lib/assets/fonts/SF-Mono-Medium.otf
+
+    - family: sf_mono_bold
+      fonts:
+        - asset: lib/assets/fonts/SF-Mono-Bold.otf

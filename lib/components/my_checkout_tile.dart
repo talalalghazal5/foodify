@@ -79,7 +79,7 @@ class MyCheckoutTile extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Text('\$${cartItem.totalPrice + 0.99}', style: TextStyle(
+                        Text('\$${(cartItem.totalPrice + 0.99).toStringAsFixed(2)}', style: TextStyle(
                           color: Theme.of(context).colorScheme.inversePrimary, fontWeight: FontWeight.bold,
                           fontFamily: fontFamily),)
                       ],

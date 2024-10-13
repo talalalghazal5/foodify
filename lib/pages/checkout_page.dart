@@ -193,7 +193,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 Theme.of(context).colorScheme.inversePrimary),
                       ),
                       Text(
-                        '\$${totalCartCost + 0.99}',
+                        '\$${(totalCartCost + 0.99).toStringAsFixed(2)}',
                         style: TextStyle(
                             fontFamily: 'sf_pro_display_regular',
                             color:
@@ -244,21 +244,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     margin: const EdgeInsets.symmetric(horizontal: 15),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text('Current balance:',
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
+                                color: Theme.of(context).colorScheme.primary,
                                 fontFamily: 'sf_pro_display_regular',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18)),
                         Text(
                           '\$1000',
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.primary,
                               fontFamily: 'sf_pro_display_regular',
                               fontWeight: FontWeight.bold,
                               fontSize: 18),

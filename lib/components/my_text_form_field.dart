@@ -72,7 +72,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
             fontFamily: 'sf_pro_display_regular',
             color: Theme.of(context).colorScheme.primary,
           )),
-      obscureText: isObscure,
+      obscureText: widget.inputType == TextInputType.visiblePassword ? isObscure : false,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Enter your ${widget.hintText.toLowerCase()}';
