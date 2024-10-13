@@ -68,7 +68,7 @@ class MyCheckoutTile extends StatelessWidget {
                           color: Theme.of(context).colorScheme.primary,
                           fontFamily: fontFamily),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ),
                     Text(
@@ -94,7 +94,7 @@ class MyCheckoutTile extends StatelessWidget {
                     )),
               ],
             ),
-            Row(),
+            const Row(),
             const SizedBox(
               height: 10,
             ),
@@ -115,7 +115,7 @@ class MyCheckoutTile extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary),
                 )
               ] else ...[
-                Container(
+                SizedBox(
                   height: 50,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,

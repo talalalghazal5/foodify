@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DeliveryProgressPage extends StatelessWidget {
@@ -6,6 +5,10 @@ class DeliveryProgressPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+        child: Text('Your order on its way!', style: TextStyle(color: Colors.green[700], fontFamily: 'sf_pro_display_regular', fontSize: 40),),
+      ),
+    );
   }
 }

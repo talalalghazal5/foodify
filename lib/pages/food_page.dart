@@ -161,6 +161,7 @@ class _FoodPageState extends State<FoodPage> {
                 addToUICart(
                     food: widget.food, selectedAddOns: widget.selectedAddOns);
                 const snackBar = SnackBar(
+                  duration: Duration(seconds: 1),
                   backgroundColor: Colors.transparent,
                   elevation: 0,
                   behavior: SnackBarBehavior.floating,

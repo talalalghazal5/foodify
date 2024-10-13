@@ -10,9 +10,9 @@ dependencies:
   awesome_snackbar_content: ^0.1.4
   collection: ^1.18.0
   cupertino_icons: ^1.0.8
+  email_validator: ^3.0.0
   flutter:
     sdk: flutter
-  flutter_credit_card: ^4.0.1
   font_awesome_flutter: ^10.7.0
   food_icons: ^0.0.6
   hugeicons: 0.0.7
@@ -43,3 +43,7 @@ flutter:
     - family: sf_pro_display_light
       fonts:
         - asset: lib/assets/fonts/SF-Pro-Display-Light.otf
+
+    - family: sf_arabic
+      fonts:
+        - asset: lib/assets/fonts/SF-Arabic.ttf
