@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodify/components/my_button.dart';
 import 'package:foodify/components/my_text_field.dart';
-import 'package:foodify/pages/home_page.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -18,6 +18,55 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  void register() async {
+    final auth = FirebaseAuth.instance;
+    final String email = emailController.text;
+    final String password = passwordController.text;
+    if (passwordController.text == confirmPasswordController.text) {
+      try {
+        await auth.createUserWithEmailAndPassword(
+            email: email, password: password);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'email-already-in-use') {
+          showCupertinoDialog(
+            context: mounted ? context : context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(
+                  'This email is already used in another account',
+                  style: TextStyle(
+                      fontFamily: 'sf_pro_display_regular',
+                      color: Theme.of(context).colorScheme.error),
+                ),
+                content: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    'Try signing up with another account',
+                    style: TextStyle(
+                        fontFamily: 'sf_pro_display_regular',
+                        color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+      }
+    } else {
+      showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return const CupertinoAlertDialog(
+            title: Text(
+              'Passwords does not match',
+              style: TextStyle(fontFamily: 'sf_pro_display_regular'),
+            ),
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +94,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).colorScheme.inversePrimary),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             //welcoming message
             Text(
               'Let\'s make you an account:',
@@ -93,8 +144,7 @@ class _RegisterPageState extends State<RegisterPage> {
               text: 'Sign up',
               margin: const EdgeInsets.symmetric(horizontal: 25),
               onTap: () {
-                Navigator.push(context,
-                    CupertinoPageRoute(builder: (context) => const HomePage()));
+                register();
               },
             ),
             const SizedBox(

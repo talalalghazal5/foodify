@@ -1,12 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:foodify/auth/login_or_register.dart';
 import 'package:foodify/components/my_drawer_tile.dart';
 import 'package:foodify/pages/settings_page.dart';
 
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
+
+  void logOut(){
+    final auth = FirebaseAuth.instance;
+    auth.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class MyDrawer extends StatelessWidget {
           MyDrawerTile(
               text: 'Logout',
               icon: FontAwesomeIcons.arrowRightFromBracket,
-              onTap: () {Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => const LoginOrRegister()));}),
+              onTap: () {logOut();}),
           const SizedBox(
             height: 20,
           )
