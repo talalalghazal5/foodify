@@ -13,8 +13,10 @@ dependencies:
   email_validator: ^3.0.0
   firebase_auth: ^5.3.1
   firebase_core: ^3.6.0
+  firebase_dynamic_links: ^6.0.8
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.1
   font_awesome_flutter: ^10.7.0
   food_icons: ^0.0.6
   hugeicons: 0.0.7

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +17,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   bool _isLoading = false;
   final auth = FirebaseAuth.instance;
   final TextEditingController emailController = TextEditingController();
@@ -33,16 +34,38 @@ class _LoginPageState extends State<LoginPage> {
               contentType: ContentType.success)));
     } catch (e) {
       showCupertinoDialog(
+          barrierDismissible: true,
           context: context,
           builder: (context) {
-            return const CupertinoAlertDialog(
-              content: Text('Error occured during sending password reset link'),
+            return CupertinoAlertDialog(
+              content: Text(
+                'Error occured during sending password reset link',
+                style: TextStyle(
+                    fontFamily: 'sf_pro_display_regular',
+                    color: Theme.of(context).colorScheme.inversePrimary),
+              ),
               actions: [
-                Text('Okay'),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text('Okay',
+                      style: TextStyle(
+                          fontFamily: 'sf_pro_display_regular',
+                          color: Theme.of(context).colorScheme.inversePrimary)),
+                )
               ],
             );
           });
     }
+  }
+
+  Widget _buildLoader() {
+    return Center(
+        child: BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
+      child: CircularProgressIndicator(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.inversePrimary),
+    ));
   }
 
   void login() async {
@@ -52,15 +75,10 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = true;
     });
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      if (_isLoading) {
-        showCupertinoModalPopup(context: context, builder: (context) {
-          return CircularProgressIndicator( );
-        });
+      if (formKey.currentState!.validate()) {
+        UserCredential userCredential = await auth.signInWithEmailAndPassword(
+            email: email, password: password);
       }
-
-
     } on FirebaseAuthException catch (e) {
       if (auth.currentUser != null) {
         showCupertinoDialog(
@@ -208,163 +226,193 @@ class _LoginPageState extends State<LoginPage> {
                 '${e.code} ===========================================================');
         }
       }
-      // if (e.code == 'wrong-password') {
-      //   showCupertinoDialog(context: mounted? context : context, builder: (context){
-      //     return const CupertinoAlertDialog(
-      //       content: Text('Wrong password, try to enter a valid password',),
-      //     );
-      //   });
-      // } if (e.code == 'user-not-found') {
-      //   showCupertinoDialog(context: mounted? context : context, builder: (context){
-      //     return const CupertinoAlertDialog(
-      //       content: Text('this email is not registered',),
-      //     );
-      //   });
-      // }
-    }finally {
-      setState(() {
-        _isLoading = false;
-      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return DismissKeyboard(
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: Stack(
           children: [
-            //logo
-            FaIcon(
-              FontAwesomeIcons.burger,
-              size: 100,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            //welcoming message
-            Text(
-              'Foodify',
-              style: TextStyle(
-                  fontSize: 30,
-                  fontFamily: 'sf_pro_display_regular',
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.inversePrimary),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Text(
-              'Welcome back! sign in to continue',
-              style: TextStyle(
-                  fontFamily: 'sf_pro_display_regular',
-                  color: Theme.of(context).colorScheme.inversePrimary),
-            ),
-
-            const SizedBox(
-              height: 50,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 25),
-              child: Form(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  key: formKey,
+            Center(
+              child: SingleChildScrollView(
+                child: Center(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      //email text field
-                      MyTextFormField(
-                        controller: emailController,
-                        hintText: "E-mail",
-                        inputType: TextInputType.emailAddress,
+                      //logo
+                      FaIcon(
+                        FontAwesomeIcons.burger,
+                        size: 100,
+                        color: Theme.of(context).colorScheme.inversePrimary,
                       ),
-
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      //welcoming message
+                      Text(
+                        'Foodify',
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontFamily: 'sf_pro_display_regular',
+                            fontWeight: FontWeight.bold,
+                            color:
+                                Theme.of(context).colorScheme.inversePrimary),
+                      ),
                       const SizedBox(
                         height: 15,
                       ),
-
-                      //password text field
-                      MyTextFormField(
-                        controller: passwordController,
-                        hintText: "Password",
-                        inputType: TextInputType.visiblePassword,
-                      ),
-                    ],
-                  )),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.only(left: 25, top: 15),
-                child: Row(
-                  children: [
-                    Text(
-                      'Forgot password? ',
-                      style: TextStyle(
-                          fontFamily: 'sf_pro_display_regular',
-                          fontSize: 13,
-                          color: Theme.of(context).colorScheme.primary),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        resetPassword(emailController.text);
-                      },
-                      child: Text(
-                        'Reset it now',
+                      Text(
+                        'Welcome back! sign in to continue',
                         style: TextStyle(
                             fontFamily: 'sf_pro_display_regular',
-                            fontSize: 13,
-                            color: Theme.of(context).colorScheme.inversePrimary,
-                            decoration: TextDecoration.underline,
-                            decorationColor:
+                            color:
                                 Theme.of(context).colorScheme.inversePrimary),
                       ),
-                    )
-                  ],
+
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 25),
+                        child: Form(
+                            autovalidateMode:
+                                AutovalidateMode.onUnfocus,
+                            key: formKey,
+                            child: Column(
+                              children: [
+                                //email text field
+                                MyTextFormField(
+                                  controller: emailController,
+                                  hintText: "E-mail",
+                                  inputType: TextInputType.emailAddress,
+                                ),
+
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                //password text field
+                                MyTextFormField(
+                                  controller: passwordController,
+                                  hintText: "Password",
+                                  inputType: TextInputType.visiblePassword,
+                                ),
+                              ],
+                            )),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 25, top: 15),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Forgot password? ',
+                                style: TextStyle(
+                                    fontFamily: 'sf_pro_display_regular',
+                                    fontSize: 13,
+                                    color:
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  resetPassword(emailController.text);
+                                },
+                                child: Text(
+                                  'Reset it now',
+                                  style: TextStyle(
+                                      fontFamily: 'sf_pro_display_regular',
+                                      fontSize: 13,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: Theme.of(context)
+                                          .colorScheme
+                                          .inversePrimary),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      //signin button
+                      DismissKeyboard(
+                        child: MyButton(
+                          text: 'Sign in',
+                          margin: const EdgeInsets.symmetric(horizontal: 25),
+                          onTap: () {
+                            login();
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Not a member? ',
+                            style: TextStyle(
+                                fontSize: 15,
+                                fontFamily: 'sf_pro_display_regular',
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary),
+                          ),
+                          InkWell(
+                            onTap: widget.onTap,
+                            child: const Text('Register now!',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'sf_pro_display_regular',
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-
-            const SizedBox(
-              height: 20,
-            ),
-            //signin button
-            MyButton(
-              text: 'Sign in',
-              margin: const EdgeInsets.symmetric(horizontal: 25),
-              onTap: () {
-                login();
-              },
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Not a member? ',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'sf_pro_display_regular',
-                      color: Theme.of(context).colorScheme.inversePrimary),
-                ),
-                InkWell(
-                  onTap: widget.onTap,
-                  child: const Text('Register now!',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'sf_pro_display_regular',
-                          fontWeight: FontWeight.bold)),
-                ),
-              ],
-            ),
+            if (_isLoading) _buildLoader(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class DismissKeyboard extends StatelessWidget {
+  final Widget child;
+
+  const DismissKeyboard({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus?.unfocus();
+        }
+      },
+      child: child,
     );
   }
 }
