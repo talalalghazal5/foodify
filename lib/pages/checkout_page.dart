@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,12 +22,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late PageController _pageController;
   final GlobalKey<FormState> formKey = GlobalKey();
 
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController cardNumberController = TextEditingController();
-
+  late TextEditingController firstNameController;
+  late TextEditingController lastNameController;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController cardNumberController;
+  late User? user;
 
   bool isShown = false;
   late List<CartItem> userCart;
@@ -35,7 +36,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    final auth = FirebaseAuth.instance;
+    user = auth.currentUser;
     _pageController = PageController();
+    firstNameController = TextEditingController();
+    lastNameController = TextEditingController();
+    emailController = TextEditingController(text: user!.email);
+    passwordController = TextEditingController();
+    cardNumberController = TextEditingController();
   }
 
   @override
@@ -277,7 +285,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           'Your ordered food:',
                           style: TextStyle(
                               fontFamily: 'sf_pro_display_regular',
-                              color: Theme.of(context).colorScheme.inversePrimary,
+                              color:
+                                  Theme.of(context).colorScheme.inversePrimary,
                               fontSize: 15),
                           textAlign: TextAlign.start,
                         ),
@@ -308,7 +317,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             child: IconButton(
                                 onPressed: () {
                                   _pageController.previousPage(
-                                      duration: const Duration(milliseconds: 400),
+                                      duration:
+                                          const Duration(milliseconds: 400),
                                       curve: Curves.decelerate);
                                 },
                                 icon: FaIcon(
@@ -333,8 +343,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               },
                               icon: FaIcon(
                                 FontAwesomeIcons.chevronRight,
-                                color:
-                                    Theme.of(context).colorScheme.inversePrimary,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .inversePrimary,
                                 size: 18,
                               )),
                         ),
@@ -346,7 +357,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     endIndent: 10,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  const SizedBox(height: 10,),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Center(
@@ -372,7 +385,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               children: [
                                 Expanded(
                                     child: MyTextFormField(
-                                      controller: firstNameController,
+                                  controller: firstNameController,
                                   hintText: 'First name',
                                   inputType: TextInputType.text,
                                 )),
@@ -381,37 +394,45 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 Expanded(
                                     child: MyTextFormField(
-                                      controller: lastNameController,
+                                        controller: lastNameController,
                                         hintText: 'Last name',
                                         inputType: TextInputType.text)),
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Row(
                               children: [
                                 Expanded(
                                     child: MyTextFormField(
-                                      controller: emailController,
+                                        controller: emailController,
+                                        isReadOnly: true,
                                         hintText: 'E-mail',
                                         inputType: TextInputType.emailAddress))
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Row(
                               children: [
                                 Expanded(
                                     child: MyTextFormField(
-                                      controller: passwordController,
+                                        controller: passwordController,
                                         hintText: 'Password',
-                                        inputType: TextInputType.visiblePassword))
+                                        inputType:
+                                            TextInputType.visiblePassword))
                               ],
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Row(
                               children: [
                                 Expanded(
                                     child: MyTextFormField(
-                                      controller: cardNumberController,
+                                        controller: cardNumberController,
                                         hintText: 'Credit card number',
                                         inputType: TextInputType.number))
                               ],
@@ -422,22 +443,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   const Spacer(),
                 ])),
                 Container(
-                    width: 1000,
-                    height: 90,
-                    padding: const EdgeInsets.all(15),
-                    child: CupertinoButton(
-                      onPressed: () {
-                        usetTappedPay();
-                      },
-                      color: Colors.green[700],
-                      child: const Text(
-                        'Pay now',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'sf_pro_display_regular'),
-                      ),
+                  width: 1000,
+                  height: 90,
+                  padding: const EdgeInsets.all(15),
+                  child: CupertinoButton(
+                    onPressed: () {
+                      usetTappedPay();
+                    },
+                    color: Colors.green[700],
+                    child: const Text(
+                      'Pay now',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'sf_pro_display_regular'),
                     ),
                   ),
+                ),
               ],
             ),
           ),
@@ -457,7 +478,8 @@ class DismissKeyboard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
           FocusManager.instance.primaryFocus?.unfocus();
         }
       },

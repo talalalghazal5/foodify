@@ -78,6 +78,13 @@ class _LoginPageState extends State<LoginPage> {
       if (formKey.currentState!.validate()) {
         UserCredential userCredential = await auth.signInWithEmailAndPassword(
             email: email, password: password);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green[700],
+            content: const Text('Logged in successfully',
+                style: TextStyle(
+                    fontFamily: 'sf_pro_display_regular',
+                    fontWeight: FontWeight.normal,
+                    color: Colors.white))));
       }
     } on FirebaseAuthException catch (e) {
       if (auth.currentUser != null) {
@@ -222,8 +229,35 @@ class _LoginPageState extends State<LoginPage> {
                   );
                 });
           default:
-            print(
-                '${e.code} ===========================================================');
+            showCupertinoDialog(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: Text('Something went wrong',
+                        style: TextStyle(
+                            fontFamily: 'sf_pro_display_regular',
+                            fontWeight: FontWeight.normal,
+                            color:
+                                Theme.of(context).colorScheme.inversePrimary)),
+                    content: Text('please try again in a while',
+                        style: TextStyle(
+                            fontFamily: 'sf_pro_display_regular',
+                            fontWeight: FontWeight.normal,
+                            color:
+                                Theme.of(context).colorScheme.inversePrimary)),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: Text('Okay',
+                              style: TextStyle(
+                                  fontFamily: 'sf_pro_display_regular',
+                                  fontWeight: FontWeight.normal,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .inversePrimary))),
+                    ],
+                  );
+                });
         }
       }
     } finally {
@@ -285,8 +319,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 25),
                         child: Form(
-                            autovalidateMode:
-                                AutovalidateMode.onUnfocus,
+                            autovalidateMode: AutovalidateMode.onUnfocus,
                             key: formKey,
                             child: Column(
                               children: [

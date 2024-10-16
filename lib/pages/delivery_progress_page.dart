@@ -2,10 +2,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodify/components/my_delivery_receipt.dart';
+import 'package:foodify/models/restaurant.dart';
+import 'package:foodify/services/database/firestore.dart';
+import 'package:provider/provider.dart';
 
-class DeliveryProgressPage extends StatelessWidget {
+class DeliveryProgressPage extends StatefulWidget {
   const DeliveryProgressPage({super.key});
 
+  @override
+  State<DeliveryProgressPage> createState() => _DeliveryProgressPageState();
+}
+
+class _DeliveryProgressPageState extends State<DeliveryProgressPage> {
+
+  final FirestoreServices database = FirestoreServices();
+  @override
+  void initState() {
+    super.initState();
+    String receipt = context.read<Restaurant>().displayReceipt();
+    database.saveOrderToDataBase(receipt);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +81,7 @@ class DeliveryProgressPage extends StatelessWidget {
               Text('  0935299727', style: TextStyle(fontFamily: 'sf_pro_display_regular', color: Theme.of(context).colorScheme.primary, fontSize: 13),)
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Row(
             
             children: [

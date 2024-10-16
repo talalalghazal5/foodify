@@ -1,19 +1,19 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyTextFormField extends StatefulWidget {
   final String hintText;
   final TextInputType inputType;
   final TextEditingController controller;
+  final bool isReadOnly;
   const MyTextFormField(
       {super.key,
       required this.hintText,
       required this.inputType,
-      required this.controller});
+      required this.controller,
+      this.isReadOnly = false,});
 
   @override
   State<MyTextFormField> createState() => _MyTextFormFieldState();
@@ -24,6 +24,7 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: widget.isReadOnly,
       controller: widget.controller,
       smartDashesType: widget.inputType == TextInputType.number
           ? SmartDashesType.enabled
@@ -37,11 +38,17 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
           fontFamilyFallback: const ['sf_arabic'],
           color: Theme.of(context).colorScheme.inversePrimary),
       decoration: InputDecoration(
-          suffixIcon: widget.inputType == TextInputType.visiblePassword? IconButton(onPressed: (){
-            setState(() {
-              isObscure = !isObscure;
-            });
-          }, icon: isObscure?  const FaIcon(FontAwesomeIcons.eye) :  const FaIcon(FontAwesomeIcons.eyeSlash)): null,
+          suffixIcon: widget.inputType == TextInputType.visiblePassword
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isObscure = !isObscure;
+                    });
+                  },
+                  icon: isObscure
+                      ? const FaIcon(FontAwesomeIcons.eye)
+                      : const FaIcon(FontAwesomeIcons.eyeSlash))
+              : null,
           // FOCUSED CASE:
           focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -72,7 +79,8 @@ class _MyTextFormFieldState extends State<MyTextFormField> {
             fontFamily: 'sf_pro_display_regular',
             color: Theme.of(context).colorScheme.primary,
           )),
-      obscureText: widget.inputType == TextInputType.visiblePassword ? isObscure : false,
+      obscureText:
+          widget.inputType == TextInputType.visiblePassword ? isObscure : false,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Enter your ${widget.hintText.toLowerCase()}';

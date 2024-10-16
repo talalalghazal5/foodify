@@ -22,6 +22,13 @@ class MyDescriptionBox extends StatelessWidget {
               const Text('Delivery fees',style: TextStyle(fontFamily: 'sf_pro_display_regular',))
             ],
           ),
+          Container(
+            width: 0.7,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

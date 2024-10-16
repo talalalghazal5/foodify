@@ -60,7 +60,7 @@ class MyDrawer extends StatelessWidget {
                             builder: (context) => const SettingsPage()))
                   }),
           MyDrawerTile(
-              text: 'Account', icon: FontAwesomeIcons.solidCircleUser, onTap: () => {Navigator.pop(context), Navigator.push(context, CupertinoPageRoute(builder: (context) => AccountPage()))}),
+              text: 'Account', icon: FontAwesomeIcons.solidCircleUser, onTap: () => {Navigator.pop(context), Navigator.push(context, CupertinoPageRoute(builder: (context) => const AccountPage()))}),
           const Spacer(),
           Padding(
             padding: const EdgeInsets.all(10),

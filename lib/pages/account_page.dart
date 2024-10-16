@@ -21,8 +21,7 @@ class _AccountPageState extends State<AccountPage> {
       user = auth.currentUser;
       print('User data: ${user != null ? user!.toString() : 'No user'}');
     } catch (e) {
-      print(e.toString() +
-          '========================================================');
+      print('$e========================================================');
     }
   }
 
@@ -69,8 +68,8 @@ class _AccountPageState extends State<AccountPage> {
                   title: Row(
                     children: [
                       Text(
-                        user!.displayName == null
-                            ? 'No user name'
+                        user!.displayName == null || user!.displayName! == ''
+                            ? 'No user name' : user!.isAnonymous ?'Guest'
                             : user!.displayName!,
                         style: TextStyle(
                             fontFamily: 'sf_pro_display_regular',
@@ -87,11 +86,11 @@ class _AccountPageState extends State<AccountPage> {
                           color: Theme.of(context).colorScheme.inversePrimary,
                           size: 20,
                         )
-                      ]
+                      ],
                     ],
                   ),
                   subtitle: Text(
-                    user!.isAnonymous ? 'Guest' : user!.email!,
+                    user!.isAnonymous ? '' : user!.email!,
                     style: TextStyle(
                       fontFamily: 'sf_pro_display_regular',
                       color: Theme.of(context).colorScheme.primary,
@@ -120,7 +119,7 @@ class _AccountPageState extends State<AccountPage> {
                         const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     tileColor: Theme.of(context).colorScheme.secondary,
                     trailing: user!.emailVerified
-                        ? Container(
+                        ? SizedBox(
                             width: 90,
                             height: 30,
                             child: Center(

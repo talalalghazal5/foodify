@@ -80,9 +80,9 @@ class _RegisterPageState extends State<RegisterPage> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         backgroundColor: Theme.of(context).colorScheme.error,
-        content: Text(
+        content: const Text(
           'Passwords does not match',
           style: TextStyle(fontFamily: 'sf_pro_display_regular'),
         ),
@@ -137,7 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 60,
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 25),
+                      margin: const EdgeInsets.symmetric(horizontal: 25),
                       child: Form(
                         autovalidateMode: AutovalidateMode.onUnfocus,
                         key: formKey,

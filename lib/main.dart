@@ -1,8 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:foodify/services/auth/auth_gate.dart';
-import 'package:foodify/services/auth/login_or_register.dart';
-import 'package:foodify/firebase_options.dart';
 import 'package:foodify/models/restaurant.dart';
 import 'package:foodify/themes/theme_provider.dart';
 import 'package:provider/provider.dart';

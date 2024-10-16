@@ -22,7 +22,7 @@ class MySliverAppBar extends StatelessWidget {
       surfaceTintColor: Theme.of(context).colorScheme.surface,
       foregroundColor: Theme.of(context).colorScheme.inversePrimary,
       title: const Text(
-        'Sunset diner',
+        'Foodify',
         style: TextStyle(
             fontFamily: 'sf_pro_display_regular', fontWeight: FontWeight.bold),
       ),
@@ -31,25 +31,31 @@ class MySliverAppBar extends StatelessWidget {
       collapsedHeight: 150,
       floating: false,
       pinned: true,
-      leading: IconButton(
-          onPressed: () {
-            scaffoldKey.currentState!.openDrawer();
-          },
-          icon: const FaIcon(FontAwesomeIcons.bars)),
-      actions: [
-        IconButton(
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: IconButton(
             onPressed: () {
-              scaffoldKey.currentState!.showBottomSheet(
-                  
-                  (context) => const CartPage(),
-                  
-                  showDragHandle: true,
-                  enableDrag: true,
-                  sheetAnimationStyle: AnimationStyle(curve: Curves.ease, duration: const Duration(milliseconds: 300)),
-                  backgroundColor: Theme.of(context).colorScheme.tertiary,
-                  );
+              scaffoldKey.currentState!.openDrawer();
             },
-            icon: const FaIcon(FontAwesomeIcons.cartShopping))
+            icon: const FaIcon(FontAwesomeIcons.bars)),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 10.0),
+          child: IconButton(
+              onPressed: () {
+                scaffoldKey.currentState!.showBottomSheet(
+                    
+                    (context) => const CartPage(),
+                    
+                    showDragHandle: true,
+                    enableDrag: true,
+                    sheetAnimationStyle: AnimationStyle(curve: Curves.ease, duration: const Duration(milliseconds: 300)),
+                    backgroundColor: Theme.of(context).colorScheme.tertiary,
+                    );
+              },
+              icon: const FaIcon(FontAwesomeIcons.cartShopping)),
+        )
       ],
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
