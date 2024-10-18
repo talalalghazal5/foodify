@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodify/components/my_button.dart';
-import 'package:foodify/components/my_text_field.dart';
 import 'package:foodify/components/my_text_form_field.dart';
 
 class RegisterPage extends StatefulWidget {

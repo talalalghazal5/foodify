@@ -8,6 +8,17 @@ class Food {
 
   Food({required this.name, required this.description, required this.imagePath, required this.price, required this.category, this.availableAddOns,});
 
+
+  Map<String, dynamic> toMap(){
+    return {
+      'name' : name,
+      'price' : price,
+      'imagePath' : imagePath,
+      'description' : description,
+      'category' : category,
+      'availableAddOns' : availableAddOns,
+    };
+  }
 }
 
 enum FoodCategory {

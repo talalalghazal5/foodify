@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:foodify/models/cart_item.dart';
 import 'package:foodify/models/food.dart';
+import 'package:foodify/services/database/firestore.dart';
 import 'package:intl/intl.dart';
 
 class Restaurant extends ChangeNotifier {
+  final FirestoreServices database = FirestoreServices();
+
   final List<Food> _menu = [
     //burger
     Food(
@@ -152,9 +156,20 @@ class Restaurant extends ChangeNotifier {
       );
 
       if (cartItem != null) {
-        cartItem.quantity++;
+        cartItem.updateQuantity(cartItem.quantity + 1);
+        try {
+          database.cart.doc(cartItem.food.name).update(
+              {'quantity': cartItem.quantity, 'cost': cartItem.totalPrice});
+              print('${cartItem.totalPrice} +++++++++++++++++++++++++++++++++++++++++++++++++++++');
+        } on FirebaseFirestore catch (e) {
+          print(
+              e.toString() + '==============================================');
+        }
       } else {
-        _cart.add(CartItem(food: food, selectedAddOns: selectedAddOns!));
+        CartItem cartItem =
+            CartItem(food: food, selectedAddOns: selectedAddOns!);
+        database.addCartItemToDatabase(cartItem);
+        _cart.add(cartItem);
       }
     } else {
       CartItem? cartItem = _cart.firstWhereOrNull((item) {
@@ -162,9 +177,21 @@ class Restaurant extends ChangeNotifier {
         return isSameItem;
       });
       if (cartItem != null) {
-        cartItem.quantity++;
+        cartItem.updateQuantity(cartItem.quantity + 1);
+        try {
+          database.cart
+              .doc(cartItem.food.name)
+              .update({'quantity': cartItem.quantity});
+          database.cart
+              .doc(cartItem.food.name)
+              .update({'cost': cartItem.totalPrice});
+        } on FirebaseFirestore catch (e) {
+          print(e.toString() + '================================');
+        }
       } else {
-        _cart.add(CartItem(food: food));
+        CartItem cartItem = CartItem(food: food);
+        database.addCartItemToDatabase(cartItem);
+        _cart.add(cartItem);
       }
     }
     notifyListeners();

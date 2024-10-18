@@ -9,6 +9,7 @@ import 'package:foodify/components/my_text_form_field.dart';
 import 'package:foodify/models/cart_item.dart';
 import 'package:foodify/models/restaurant.dart';
 import 'package:foodify/pages/delivery_progress_page.dart';
+import 'package:foodify/services/database/firestore.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -28,13 +29,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late TextEditingController passwordController;
   late TextEditingController cardNumberController;
   late User? user;
-
+  FirestoreServices database = FirestoreServices();
   bool isShown = false;
+
   late List<CartItem> userCart;
   late double totalCartCost;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     final auth = FirebaseAuth.instance;
     user = auth.currentUser;
@@ -72,6 +73,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   )),
               TextButton(
                   onPressed: () {
+                    database.addOrderToDataBase();
                     Navigator.pop(context);
                     Navigator.push(
                         context,

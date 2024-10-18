@@ -7,6 +7,10 @@ class CartItem {
 
   CartItem({required this.food, this.selectedAddOns , this.quantity = 1});
 
+
+  void updateQuantity(int newQuantity) {
+    quantity = newQuantity;
+  }
   double get totalPrice {
     // TODO: Ask Copilot about this fold() function:
     if (selectedAddOns != null) {
@@ -17,7 +21,5 @@ class CartItem {
       return double.parse((food.price * quantity).toStringAsFixed(2));
     }
   }
-
-
 
 }

@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foodify/components/my_button.dart';
 import 'package:foodify/models/food.dart';
 import 'package:foodify/models/restaurant.dart';
+import 'package:foodify/services/database/firestore.dart';
 import 'package:provider/provider.dart';
 
 class FoodPage extends StatefulWidget {
@@ -27,6 +28,7 @@ class FoodPage extends StatefulWidget {
 }
 
 class _FoodPageState extends State<FoodPage> {
+    FirestoreServices database = FirestoreServices();
   void addToUICart({required Food food, Map<AddOn, bool>? selectedAddOns}) {
     // closing the food page:
     Navigator.pop(context);

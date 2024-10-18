@@ -134,7 +134,7 @@ class MyCartTile extends StatelessWidget {
                       onIncrement: () => restaurant.addToCart(
                           food: cartItem.food,
                           selectedAddOns: cartItem.selectedAddOns),
-                      food: cartItem.food),
+                      ),
                 ],
               )
             ],

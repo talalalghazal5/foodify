@@ -1,8 +1,14 @@
+// ignore_for_file: avoid_print
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:foodify/models/cart_item.dart';
+import 'package:foodify/models/food.dart';
+import 'package:foodify/services/database/firestore.dart';
+import 'package:intl/intl.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -13,46 +19,53 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   late final User? user;
+  FirestoreServices database = FirestoreServices();
+
   @override
   void initState() {
     super.initState();
     final auth = FirebaseAuth.instance;
     try {
       user = auth.currentUser;
+
       print('User data: ${user != null ? user!.toString() : 'No user'}');
     } catch (e) {
       print('$e========================================================');
     }
+    
+  }
+
+  getCart() async {
+    QuerySnapshot snapshots = await database.cart.get();
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'My Account',
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'sf_pro_display_regular'),
+        appBar: AppBar(
+          title: Text(
+            'My Account',
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'sf_pro_display_regular'),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: FaIcon(
+                FontAwesomeIcons.chevronLeft,
+                color: Theme.of(context).colorScheme.inversePrimary,
+              )),
         ),
-        centerTitle: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: FaIcon(
-              FontAwesomeIcons.chevronLeft,
-              color: Theme.of(context).colorScheme.inversePrimary,
-            )),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-              child: ListView(
+        body: SingleChildScrollView(
+          child: Column(
             children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: ListTile(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
@@ -69,13 +82,15 @@ class _AccountPageState extends State<AccountPage> {
                     children: [
                       Text(
                         user!.displayName == null || user!.displayName! == ''
-                            ? 'No user name' : user!.isAnonymous ?'Guest'
-                            : user!.displayName!,
+                            ? 'No user name'
+                            : user!.isAnonymous
+                                ? 'Guest'
+                                : user!.displayName!,
                         style: TextStyle(
                             fontFamily: 'sf_pro_display_regular',
                             color: Theme.of(context).colorScheme.inversePrimary,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                            fontSize: 17),
                       ),
                       if (user!.emailVerified) ...[
                         const SizedBox(
@@ -83,8 +98,8 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                         FaIcon(
                           FontAwesomeIcons.solidCircleCheck,
-                          color: Theme.of(context).colorScheme.inversePrimary,
-                          size: 20,
+                          color: Colors.blue[700],
+                          size: 17,
                         )
                       ],
                     ],
@@ -100,10 +115,12 @@ class _AccountPageState extends State<AccountPage> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
               ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 15),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                ),
                 child: ListTile(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
@@ -213,12 +230,56 @@ class _AccountPageState extends State<AccountPage> {
                                   fontFamily: 'sf_pro_display_regular',
                                   fontSize: 12),
                             ))),
-              )
+              ),
+              const SizedBox(
+                height: 25,
+              ),
+              Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text(
+                      'Order History',
+                      style: TextStyle(
+                          fontFamily: 'sf_pro_display_regular',
+                          color: Theme.of(context).colorScheme.inversePrimary),
+                    ),
+                  )),
+              Container(
+                  height: 500,
+                  child: StreamBuilder(
+                    stream: database.cart.snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                        return Center(child: Text('No items in the cart.'));
+                      }
+                      var orders = snapshot.data!.docs;
+                      return ListView.builder(
+                        itemCount: orders.length,
+                        itemBuilder: (context, index) {
+                          var item = orders[index];
+                          return Card(
+                            child: ListTile(
+                              title: Text(
+                                  '${item['name']} x ${item['quantity']} '),
+                              subtitle: Text(
+                                item['selectedAddons'].toString(),
+                              ),
+                              trailing: Text('${item['cost']}'),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ))
             ],
-          )),
-        ],
-      ),
-    );
+          ),
+        ));
   }
 
   void verifyEmail() async {
@@ -252,26 +313,24 @@ class _AccountPageState extends State<AccountPage> {
     } catch (e) {
       print(
           '$e =============================================================================');
-      ScaffoldMessenger.of(context)
-          .showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: const Text(
             'An error occurred while sending email verification.',
             style: TextStyle(
-              fontFamily:
-                  'sf_pro_display_regular',
+              fontFamily: 'sf_pro_display_regular',
             ),
           ),
-          behavior:
-              SnackBarBehavior.floating,
-          backgroundColor:
-              Colors.red[900],
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red[900],
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10),
           ),
         ),
       );
     }
   }
 }
+
+
+// 
